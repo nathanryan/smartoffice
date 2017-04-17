@@ -18,18 +18,20 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 /**
  *
- * @author nathan
+ * @author nathan and karl
  */
 public class ClientManager implements ServiceListener {
     
     private final ClientManagerUI ui;
     private JmDNS jmdns;
     private final ThermostatClient client = new ThermostatClient();
+    private final KettleClient kclient = new KettleClient();
 
     public ClientManager() {
         try {
             jmdns = JmDNS.create(InetAddress.getLocalHost());
             jmdns.addServiceListener(client.getServiceType(), this);
+            jmdns.addServiceListener(kclient.getServiceType(), this);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -66,11 +68,29 @@ public class ClientManager implements ServiceListener {
                 client.switchService(newService);
             }
             client.remove(name);
-        } else if (client.getServiceType().equals(type)) {
+        } 
+        else if (client.getServiceType().equals(type)) {
             ui.removePanel(client.returnUI());
             client.disable();
             client.initialized = false;
         }
+        else if (kclient.getServiceType().equals(type) && kclient.hasMultiple()) {
+            if (kclient.isCurrent(name)) {
+                ServiceInfo[] a = jmdns.list(type);
+                for (ServiceInfo in : a) {
+                    if (!in.getName().equals(name)) {
+                        newService = in;
+                    }
+                }
+                kclient.switchService(newService);
+            }
+            kclient.remove(name);
+        } else if (kclient.getServiceType().equals(type)) {
+            ui.removePanel(kclient.returnUI());
+            kclient.disable();
+            kclient.initialized = false;
+        }
+        
     }
 
     public void serviceResolved(ServiceEvent arg0) {
@@ -87,6 +107,16 @@ public class ClientManager implements ServiceListener {
         } else if (client.getServiceType().equals(type)
                 && client.isInitialized()) {
             client.addChoice(arg0.getInfo());
+
+        }
+        else if (kclient.getServiceType().equals(type) && !kclient.isInitialized()) {
+            kclient.setUp(address, port);
+            ui.addPanel(kclient.returnUI(), kclient.getName());
+            kclient.setCurrent(arg0.getInfo());
+            kclient.addChoice(arg0.getInfo());
+        } else if (kclient.getServiceType().equals(type)
+                && kclient.isInitialized()) {
+            kclient.addChoice(arg0.getInfo());
 
         }
     }

@@ -22,7 +22,7 @@ public class ThermostatService extends Service{
     public ThermostatService(String name) {
         super(name, "_thermostat._udp.local.");
         timer = new Timer();
-        maxRoomTemp = 40; //maxium temp room can go to
+        maxRoomTemp = 40; //maximum temp room can go to
         minRoomTemp = 0; //lowest temp room can drop to
         roomTemp = 20; //defaault standard room temp
         ui = new ServiceUI(this, name);
@@ -50,13 +50,13 @@ public class ThermostatService extends Service{
     
      public void increase_temp() {
             if (roomTemp != maxRoomTemp) {
-                roomTemp += 1;
+                roomTemp += 5;
             }
         }
      
      public void decrease_temp() {
             if (roomTemp != minRoomTemp) {
-                roomTemp -= 1;
+                roomTemp -= 5;
             }
         }
 
