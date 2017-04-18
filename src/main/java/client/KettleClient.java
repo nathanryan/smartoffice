@@ -6,6 +6,8 @@
 package client;
 
 import clientui.KettleUI;
+import com.google.gson.Gson;
+import models.KettleModel;
 /**
  *
  * @author Karl
@@ -26,15 +28,15 @@ public class KettleClient extends Client {
      * sends input for boil kettle.
      */
     public void boilWater() {
-        if (!isWarming) {
-            String a = sendMessage(BOIL);
-            if (a.equals(OK)) {
-                isWarming = true;
-                ui.updateArea("Kettle is boiling..");
-            }
-        } else {
-            ui.updateArea("Kettle is already boiling..");
+        String json = new Gson().toJson(new KettleModel(KettleModel.Action.BOIL));
+        String a = sendMessage(json);
+        KettleModel kettle = new Gson().fromJson(a, KettleModel.class);
+        System.out.println("Client Received "+json);
+        if (kettle.getAction() == KettleModel.Action.BOIL) {
+           isWarming = kettle.getValue();
+           ui.updateArea(kettle.getMessage());
         }
+//         ui.updateArea("Kettle is already boiling..");
     }
 
     @Override

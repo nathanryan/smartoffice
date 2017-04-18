@@ -59,6 +59,7 @@ public class ClientManager implements ServiceListener {
         String type = arg0.getType();
         String name = arg0.getName();
         ServiceInfo newService = null;
+        //TRY CHANGE TO SWITCH 
         if (client.getServiceType().equals(type) && client.hasMultiple()) {
             if (client.isCurrent(name)) {
                 ServiceInfo[] a = jmdns.list(type);
