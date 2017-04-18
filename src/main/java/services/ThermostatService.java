@@ -5,8 +5,8 @@
  */
 package services;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import com.google.gson.Gson;
+import models.ThermostatModel;
 
 import serviceui.ServiceUI;
 /**
@@ -17,56 +17,76 @@ public class ThermostatService extends Service{
      private int maxRoomTemp;
      private int minRoomTemp;
      private int roomTemp;
+     private static boolean isIncreasing, isDecreasing;
 
     public ThermostatService(String name) {
         super(name, "_thermostat._udp.local.");
         maxRoomTemp = 40; //maximum temp room can go to
         minRoomTemp = 0; //lowest temp room can drop to
         roomTemp = 20; //defaault standard room temp
+        isIncreasing = false;
+        isDecreasing = false;
         ui = new ServiceUI(this, name);
     }
 
     @Override
     public void performAction(String a) {
-        if (a.equals("get_status")) {
-            sendBack(getStatus());
-        } else if (a.equals("INCREASE_TEMP")) {
-            //timer.schedule(new RemindTask(), 0, 2000);
+        System.out.println("recieved: " +a);
+        ThermostatModel thermostat = new Gson().fromJson(a, ThermostatModel.class);
+        
+        if (thermostat.getAction() == ThermostatModel.Action.STATUS) {
+            String msg = getStatus();
+            String json = new Gson().toJson(new ThermostatModel(ThermostatModel.Action.STATUS, msg));
+            sendBack(json);
+        } 
+        
+        //INCREASE ROOM TEMP
+        else if (thermostat.getAction() == ThermostatModel.Action.INCREASE_TEMP) {
             increase_temp();
-            sendBack("OK");
-            ui.updateArea("Warming Room");
-        } else if (a.equals("DECREASE_TEMP")) {
-            //timer.schedule(new RemindTask(), 0, 2000);
+            String msg = (isIncreasing)? "The Room is Warming Up by 5c!" : "Sorry you cannot increase the Temp, Room is at Max Temp";
+            String json = new Gson().toJson(new ThermostatModel(ThermostatModel.Action.INCREASE_TEMP,msg));
+            System.out.println(json);
+            sendBack(json);
+            
+            String serviceMessage = (isIncreasing)?  "The Room is Warming Up by 5c!" : "Sorry you cannot increase the Temp, Room is at Max Temp";
+            ui.updateArea(serviceMessage);            
+        } 
+        
+        //DECREASE ROOM TEMP
+        else if (thermostat.getAction() == ThermostatModel.Action.DECREASE_TEMP) {
             decrease_temp();
-            sendBack("OK");
-            ui.updateArea("Cooling Room");
+            String msg = (isDecreasing)? "The Room is Cooling Down by 5c!" : "Sorry you cannot decrease the Temp, Room is a Min Temp";
+            String json = new Gson().toJson(new ThermostatModel(ThermostatModel.Action.DECREASE_TEMP,msg));
+            System.out.println(json);
+            sendBack(json);
+         
+            String serviceMessage = (isDecreasing)?  "The Room is Cooling Down by 5c!" : "Sorry you cannot decrease the Temp, Room is a Min Temp";
+            ui.updateArea(serviceMessage); 
         } 
         else {
             sendBack(BAD_COMMAND + " - " + a);
         }
     }
     
-     public void increase_temp() {
+     public void increase_temp() {       
             if (roomTemp != maxRoomTemp) {
+                isIncreasing = true;
                 roomTemp += 5;
+               }
+            else{
+                isIncreasing = false;
             }
         }
      
      public void decrease_temp() {
             if (roomTemp != minRoomTemp) {
+                isDecreasing = true;
                 roomTemp -= 5;
             }
-        }
-
-   /* class RemindTask extends TimerTask {
-
-        @Override
-        public void run() {
-            if (roomTemp != maxRoomTemp) {
-                roomTemp += 1;
+            else{
+                isDecreasing = false;
             }
         }
-    } */
 
     @Override
     public String getStatus() {
