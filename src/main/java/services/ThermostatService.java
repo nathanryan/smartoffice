@@ -14,14 +14,12 @@ import serviceui.ServiceUI;
  * @author nathan
  */
 public class ThermostatService extends Service{
-     private final Timer timer;
      private int maxRoomTemp;
      private int minRoomTemp;
      private int roomTemp;
 
     public ThermostatService(String name) {
         super(name, "_thermostat._udp.local.");
-        timer = new Timer();
         maxRoomTemp = 40; //maximum temp room can go to
         minRoomTemp = 0; //lowest temp room can drop to
         roomTemp = 20; //defaault standard room temp

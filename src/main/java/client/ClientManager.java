@@ -26,12 +26,14 @@ public class ClientManager implements ServiceListener {
     private JmDNS jmdns;
     private final ThermostatClient client = new ThermostatClient();
     private final KettleClient kclient = new KettleClient();
+    private final PrinterClient pclient = new PrinterClient();
 
     public ClientManager() {
         try {
             jmdns = JmDNS.create(InetAddress.getLocalHost());
             jmdns.addServiceListener(client.getServiceType(), this);
             jmdns.addServiceListener(kclient.getServiceType(), this);
+            jmdns.addServiceListener(pclient.getServiceType(), this);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -68,12 +70,16 @@ public class ClientManager implements ServiceListener {
                 client.switchService(newService);
             }
             client.remove(name);
-        } 
+        }
+        
+        //Run Thermostat Client
         else if (client.getServiceType().equals(type)) {
             ui.removePanel(client.returnUI());
             client.disable();
             client.initialized = false;
         }
+        
+        //Run Kettle Client
         else if (kclient.getServiceType().equals(type) && kclient.hasMultiple()) {
             if (kclient.isCurrent(name)) {
                 ServiceInfo[] a = jmdns.list(type);
@@ -85,7 +91,23 @@ public class ClientManager implements ServiceListener {
                 kclient.switchService(newService);
             }
             kclient.remove(name);
-        } else if (kclient.getServiceType().equals(type)) {
+        } 
+        
+        //Run Printer Client
+        else if (pclient.getServiceType().equals(type) && pclient.hasMultiple()) {
+            if (pclient.isCurrent(name)) {
+                ServiceInfo[] a = jmdns.list(type);
+                for (ServiceInfo in : a) {
+                    if (!in.getName().equals(name)) {
+                        newService = in;
+                    }
+                }
+                pclient.switchService(newService);
+            }
+            pclient.remove(name);
+        } 
+        
+        else if (kclient.getServiceType().equals(type)) {
             ui.removePanel(kclient.returnUI());
             kclient.disable();
             kclient.initialized = false;
@@ -107,8 +129,9 @@ public class ClientManager implements ServiceListener {
         } else if (client.getServiceType().equals(type)
                 && client.isInitialized()) {
             client.addChoice(arg0.getInfo());
-
         }
+        
+        //Kettle Client
         else if (kclient.getServiceType().equals(type) && !kclient.isInitialized()) {
             kclient.setUp(address, port);
             ui.addPanel(kclient.returnUI(), kclient.getName());
@@ -117,7 +140,17 @@ public class ClientManager implements ServiceListener {
         } else if (kclient.getServiceType().equals(type)
                 && kclient.isInitialized()) {
             kclient.addChoice(arg0.getInfo());
-
+        }
+        
+        //Printer Client
+        else if (pclient.getServiceType().equals(type) && !pclient.isInitialized()) {
+            pclient.setUp(address, port);
+            ui.addPanel(pclient.returnUI(), pclient.getName());
+            pclient.setCurrent(arg0.getInfo());
+            pclient.addChoice(arg0.getInfo());
+        } else if (pclient.getServiceType().equals(type)
+                && pclient.isInitialized()) {
+            pclient.addChoice(arg0.getInfo());
         }
     }
 
