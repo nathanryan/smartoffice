@@ -18,6 +18,8 @@ import javax.jmdns.ServiceInfo;
 import javax.swing.JPanel;
 
 import clientui.ClientUI;
+import com.google.gson.Gson;
+import models.KettleModel;
 
 /**
  *
@@ -30,7 +32,7 @@ public abstract class Client {
     protected String serviceType = "stuff";
     protected boolean initialized = false;
     protected String name = " ";
-    protected String GET_STATUS = "get_status";
+    protected String GET_STATUS = "{action: STATUS}";
     protected Socket toServer;
     protected String pollQuery;
     protected String pollResult;
@@ -146,7 +148,7 @@ public abstract class Client {
         serverPort = port;
         initialized = true;
         timer = new Timer();
-        timer.scheduleAtFixedRate(new PollServer(), 6000, 20000);
+        timer.scheduleAtFixedRate(new PollServer(), 300, 5000);
     }
 
     public JPanel returnUI() {
@@ -174,7 +176,7 @@ public abstract class Client {
 
         @Override
         public void run() {
-            String msg = "";
+            String inputMessage = "";
             try {
                 Socket pollSocket = new Socket(serverHost, serverPort);
                 PrintWriter out = new PrintWriter(pollSocket.getOutputStream(),
@@ -182,7 +184,9 @@ public abstract class Client {
                 out.println(GET_STATUS);
                 BufferedReader in = new BufferedReader(new InputStreamReader(
                         pollSocket.getInputStream()));
-                msg = in.readLine();
+                inputMessage = in.readLine();
+                KettleModel kettle = new Gson().fromJson(inputMessage, KettleModel.class);
+                String msg = kettle.getMessage();
                 String prevStatus = serverStatus;
                 serverStatus = msg;
                 if (!prevStatus.equals(serverStatus)) {
