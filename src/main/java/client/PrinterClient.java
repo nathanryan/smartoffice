@@ -6,66 +6,70 @@
 package client;
 
 import clientui.PrinterUI;
-
+import com.google.gson.Gson;
+import models.PrinterModel;
 /**
  *
  * @author nathan
  */
-public class PrinterClient extends Client {
-    private final String CHECK = "CHECK";
-    private final String PRINT = "PRINT";
-    private boolean isOn = false;
-    private boolean printing = false;
+public class PrinterClient extends Client {   
     
-      public PrinterClient() {
+    public PrinterClient() {
         super();
         serviceType = "_printer._udp.local.";
         ui = new PrinterUI(this);
         name = "Office Printer";
     }
-      
-    public void check(){
-        if(!isOn){
-            String a = sendMessage(CHECK);
-            if(a.equals(OK)){
-                isOn = true;
-                ui.updateArea("Printer is on!");
-            }
-        }
-        else{
-            ui.updateArea("Printer is already on!");
+
+    public void checkQueue() {
+        String json = new Gson().toJson(new PrinterModel(PrinterModel.Action.CHECK_QUEUE));
+        String a = sendMessage(json);
+        PrinterModel printer = new Gson().fromJson(a, PrinterModel.class);
+        System.out.println("Client Received "+json);
+        if (printer.getAction() == PrinterModel.Action.CHECK_QUEUE) {
+           ui.updateArea(printer.getMessage());
         }
     }
     
-    public void print(){
-        if(!printing){
-            String a = sendMessage(PRINT);
-            if(a.equals(OK)){
-                printing = true;
-                ui.updateArea("Printing documents");
-            }
+        public void addQueue() {
+        String json = new Gson().toJson(new PrinterModel(PrinterModel.Action.ADD_QUEUE));
+        String a = sendMessage(json);
+        PrinterModel printer = new Gson().fromJson(a, PrinterModel.class);
+        System.out.println("Client Received "+json);
+        if (printer.getAction() == PrinterModel.Action.ADD_QUEUE) {
+           ui.updateArea(printer.getMessage());
         }
-        else
-        {
-            ui.updateArea("Not Printing");
-        }
+    }
         
-    }
-    
-    @Override
-    public void updatePoll(String msg){
-        if(msg.equals("Printer is on!")){
-            isOn = true;
-        }
-        else if(msg.equals("Printing documents")){
-            printing = true;
+    public void removeQueue() {
+        String json = new Gson().toJson(new PrinterModel(PrinterModel.Action.REMOVE_QUEUE));
+        String a = sendMessage(json);
+        PrinterModel printer = new Gson().fromJson(a, PrinterModel.class);
+        System.out.println("Client Received "+json);
+        if (printer.getAction() == PrinterModel.Action.REMOVE_QUEUE) {
+           ui.updateArea(printer.getMessage());
         }
     }
     
+    public void Print() {
+        String json = new Gson().toJson(new PrinterModel(PrinterModel.Action.PRINT_QUEUE));
+        String a = sendMessage(json);
+        PrinterModel printer = new Gson().fromJson(a, PrinterModel.class);
+        System.out.println("Client Received "+json);
+        if (printer.getAction() == PrinterModel.Action.PRINT_QUEUE) {
+           ui.updateArea(printer.getMessage());
+        }
+    }
+
     @Override
-    public void disable(){
+    public void updatePoll(String msg) {
+        if (msg.equals("Checking Print Queue...")) {
+        }
+    }
+
+    @Override
+    public void disable() {
         super.disable();
         ui = new PrinterUI(this);
-        isOn = false;
     }
 }
