@@ -10,11 +10,11 @@ package models;
  * @author Karl
  */
 public class KettleModel {
-    
+
     public enum Action {
         BOIL, STATUS
     }
-    
+
     private Action action;
     private String message;
     private boolean value;
@@ -36,7 +36,6 @@ public class KettleModel {
         this.message = message;
         this.value = value;
     }
-    
 
     public Action getAction() {
         return action;
@@ -61,7 +60,5 @@ public class KettleModel {
     public void setValue(boolean value) {
         this.value = value;
     }
-    
-    
-    
+
 }

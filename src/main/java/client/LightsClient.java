@@ -14,6 +14,7 @@ import models.LightsModel;
  * @author Karl
  */
 public class LightsClient extends Client {
+
     private final String BRIGHTEN_LIGHTS = "BRIGHTEN_LIGHTS";
     private final String DIM_LIGHTS = "DIM_LIGHTS";
     private final String TURN_OFF_LIGHTS = "TURN_OFF_LIGHTS";
@@ -34,52 +35,55 @@ public class LightsClient extends Client {
      * sends a message to brighten the room
      */
     public void brighten_lights() {
-            String json = new Gson().toJson(new LightsModel(LightsModel.Action.BRIGHTEN_LIGHTS));            
-            String a = sendMessage(json);
-            LightsModel lights = new Gson().fromJson(a, LightsModel.class);
-            System.out.println("Client Received "+json);
-            
-            if (lights.getAction() == LightsModel.Action.BRIGHTEN_LIGHTS) {
-                isChanging = lights.getValue();
-                ui.updateArea(lights.getMessage());
-            }
+        String json = new Gson().toJson(new LightsModel(LightsModel.Action.BRIGHTEN_LIGHTS));
+        String a = sendMessage(json);
+        LightsModel lights = new Gson().fromJson(a, LightsModel.class);
+        System.out.println("Client Received " + json);
+
+        if (lights.getAction() == LightsModel.Action.BRIGHTEN_LIGHTS) {
+            isChanging = lights.getValue();
+            ui.updateArea(lights.getMessage());
+        }
     }
-    
+
+    //send a message to dim lights
     public void dim_lights() {
-            String json = new Gson().toJson(new LightsModel(LightsModel.Action.DIM_LIGHTS));            
-            String a = sendMessage(json);
-            LightsModel lights = new Gson().fromJson(a, LightsModel.class);
-            System.out.println("Client Received "+json);
-            
-            if (lights.getAction() == LightsModel.Action.DIM_LIGHTS) {               
-                isChanging = lights.getValue();
-                ui.updateArea(lights.getMessage());
-            }
-        } 
-    
+        String json = new Gson().toJson(new LightsModel(LightsModel.Action.DIM_LIGHTS));
+        String a = sendMessage(json);
+        LightsModel lights = new Gson().fromJson(a, LightsModel.class);
+        System.out.println("Client Received " + json);
+
+        if (lights.getAction() == LightsModel.Action.DIM_LIGHTS) {
+            isChanging = lights.getValue();
+            ui.updateArea(lights.getMessage());
+        }
+    }
+
+    //turn off lights message
     public void turn_off() {
-            String json = new Gson().toJson(new LightsModel(LightsModel.Action.TURN_OFF_LIGHTS));            
-            String a = sendMessage(json);
-            LightsModel lights = new Gson().fromJson(a, LightsModel.class);
-            System.out.println("Client Received "+json);
-            
-            if (lights.getAction() == LightsModel.Action.TURN_OFF_LIGHTS) {               
-                isChanging = lights.getValue();
-                ui.updateArea(lights.getMessage());
-            }
-        } 
-    
+        String json = new Gson().toJson(new LightsModel(LightsModel.Action.TURN_OFF_LIGHTS));
+        String a = sendMessage(json);
+        LightsModel lights = new Gson().fromJson(a, LightsModel.class);
+        System.out.println("Client Received " + json);
+
+        if (lights.getAction() == LightsModel.Action.TURN_OFF_LIGHTS) {
+            isChanging = lights.getValue();
+            ui.updateArea(lights.getMessage());
+        }
+    }
+
+    //turn on lights message
     public void turn_on() {
-            String json = new Gson().toJson(new LightsModel(LightsModel.Action.TURN_ON_LIGHTS));            
-            String a = sendMessage(json);
-            LightsModel lights = new Gson().fromJson(a, LightsModel.class);
-            System.out.println("Client Received "+json);
-            
-            if (lights.getAction() == LightsModel.Action.TURN_ON_LIGHTS) {               
-                isChanging = lights.getValue();
-                ui.updateArea(lights.getMessage());
-            }
-        } 
+        String json = new Gson().toJson(new LightsModel(LightsModel.Action.TURN_ON_LIGHTS));
+        String a = sendMessage(json);
+        LightsModel lights = new Gson().fromJson(a, LightsModel.class);
+        System.out.println("Client Received " + json);
+
+        if (lights.getAction() == LightsModel.Action.TURN_ON_LIGHTS) {
+            isChanging = lights.getValue();
+            ui.updateArea(lights.getMessage());
+        }
+    }
 
     @Override
     public void updatePoll(String msg) {
@@ -95,6 +99,3 @@ public class LightsClient extends Client {
         isChanging = false;
     }
 }
-
-    
-

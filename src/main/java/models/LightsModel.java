@@ -10,10 +10,11 @@ package models;
  * @author Karl
  */
 public class LightsModel {
-      public enum Action {
+
+    public enum Action {
         BRIGHTEN_LIGHTS, DIM_LIGHTS, STATUS, TURN_OFF_LIGHTS, TURN_ON_LIGHTS
     }
-    
+
     private Action action;
     private String message;
     private boolean value;
@@ -35,7 +36,6 @@ public class LightsModel {
         this.message = message;
         this.value = value;
     }
-    
 
     public Action getAction() {
         return action;

@@ -11,14 +11,16 @@ import java.util.TimerTask;
 import models.KettleModel;
 
 import serviceui.ServiceUI;
+
 /**
  *
  * @author karl
  */
-public class KettleService extends Service{
-     private Timer timer;
-     private int boilPercent;
-     private static boolean isBoiling, isRunning;
+public class KettleService extends Service {
+
+    private Timer timer;
+    private int boilPercent;
+    private static boolean isBoiling, isRunning;
 
     public KettleService(String name) {
         super(name, "_kettle._udp.local.");
@@ -31,7 +33,7 @@ public class KettleService extends Service{
 
     @Override
     public void performAction(String a) {
-        System.out.println("recieved: " +a);
+        System.out.println("recieved: " + a);
         KettleModel kettle = new Gson().fromJson(a, KettleModel.class);
         if (kettle.getAction() == KettleModel.Action.STATUS) {
             String msg = getStatus();
@@ -40,11 +42,11 @@ public class KettleService extends Service{
         } else if (kettle.getAction() == KettleModel.Action.BOIL) {
             timer = new Timer();
             timer.schedule(new RemindTask(), 100, 1000);
-            String msg = (isBoiling)? "Kettle is already boiling.." : "The Kettle is Boiling";
-            String json = new Gson().toJson(new KettleModel(KettleModel.Action.BOIL,msg , isBoiling));
+            String msg = (isBoiling) ? "Kettle is already boiling.." : "The Kettle is Boiling";
+            String json = new Gson().toJson(new KettleModel(KettleModel.Action.BOIL, msg, isBoiling));
             System.out.println(json);
             sendBack(json);
-            String serviceMessage = (isBoiling)?  "Kettle is already boiling.." : "Water boiling..";
+            String serviceMessage = (isBoiling) ? "Kettle is already boiling.." : "Water boiling..";
             ui.updateArea(serviceMessage);
         } else {
             sendBack(BAD_COMMAND + " - " + a);
@@ -52,15 +54,14 @@ public class KettleService extends Service{
     }
 
     class RemindTask extends TimerTask {
-       
+
         @Override
         public void run() {
             isRunning = true;
             if (boilPercent < 100) {
                 isBoiling = true;
                 boilPercent += 10;
-            }
-            else{
+            } else {
                 isBoiling = false;
             }
         }
@@ -71,14 +72,14 @@ public class KettleService extends Service{
     public String getStatus() {
         String msg = "";
 //        return "Water is " + boilPercent + " degrees celsius";
-        if(boilPercent == -1){
+        if (boilPercent == -1) {
             msg = "Kettle is ready to Boil!";
-        }else if (boilPercent > -1 && boilPercent < 100){
+        } else if (boilPercent > -1 && boilPercent < 100) {
             msg = "Water is " + boilPercent + " degrees celsius";
-        }else if(boilPercent >= 100){
+        } else if (boilPercent >= 100) {
             msg = "Boiling is complete";
             boilPercent = -1;
-            if (isRunning){
+            if (isRunning) {
                 timer.cancel();
                 isRunning = false;
             }

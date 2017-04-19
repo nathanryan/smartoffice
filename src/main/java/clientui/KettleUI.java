@@ -8,11 +8,12 @@ package clientui;
 import java.awt.event.ActionEvent;
 import javax.swing.JButton;
 import client.KettleClient;
+
 /**
  *
  * @author Karl
  */
-public class KettleUI extends ClientUI{
+public class KettleUI extends ClientUI {
 
     private static final long serialVersionUID = -5318589393275157185L;
     private JButton boil;

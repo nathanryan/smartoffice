@@ -16,12 +16,13 @@ import clientui.ClientManagerUI;
 import java.net.InetAddress;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 /**
  *
  * @author nathan and karl
  */
 public class ClientManager implements ServiceListener {
-    
+
     private final ClientManagerUI ui;
     private JmDNS jmdns;
     private final ThermostatClient client = new ThermostatClient();
@@ -73,16 +74,12 @@ public class ClientManager implements ServiceListener {
                 client.switchService(newService);
             }
             client.remove(name);
-        }
-        
-        //Run Thermostat Client
+        } //Run Thermostat Client
         else if (client.getServiceType().equals(type)) {
             ui.removePanel(client.returnUI());
             client.disable();
             client.initialized = false;
-        }
-        
-        //Run Kettle Client
+        } //Run Kettle Client
         else if (kclient.getServiceType().equals(type) && kclient.hasMultiple()) {
             if (kclient.isCurrent(name)) {
                 ServiceInfo[] a = jmdns.list(type);
@@ -94,15 +91,11 @@ public class ClientManager implements ServiceListener {
                 kclient.switchService(newService);
             }
             kclient.remove(name);
-        } 
-        
-            else if (kclient.getServiceType().equals(type)) {
+        } else if (kclient.getServiceType().equals(type)) {
             ui.removePanel(kclient.returnUI());
             kclient.disable();
             kclient.initialized = false;
-        }
-        
-        //Run Lights Client
+        } //Run Lights Client
         else if (lclient.getServiceType().equals(type) && lclient.hasMultiple()) {
             if (lclient.isCurrent(name)) {
                 ServiceInfo[] a = jmdns.list(type);
@@ -114,15 +107,11 @@ public class ClientManager implements ServiceListener {
                 lclient.switchService(newService);
             }
             lclient.remove(name);
-        } 
-        
-        else if (lclient.getServiceType().equals(type)) {
+        } else if (lclient.getServiceType().equals(type)) {
             ui.removePanel(lclient.returnUI());
             lclient.disable();
             lclient.initialized = false;
-        }
-        
-        //Printer Client
+        } //Printer Client
         else if (pclient.getServiceType().equals(type) && pclient.hasMultiple()) {
             if (pclient.isCurrent(name)) {
                 ServiceInfo[] a = jmdns.list(type);
@@ -134,14 +123,12 @@ public class ClientManager implements ServiceListener {
                 pclient.switchService(newService);
             }
             pclient.remove(name);
-        } 
-        
-        else if (pclient.getServiceType().equals(type)) {
+        } else if (pclient.getServiceType().equals(type)) {
             ui.removePanel(pclient.returnUI());
             pclient.disable();
             pclient.initialized = false;
         }
-        
+
     }
 
     public void serviceResolved(ServiceEvent arg0) {
@@ -159,9 +146,7 @@ public class ClientManager implements ServiceListener {
         } else if (client.getServiceType().equals(type)
                 && client.isInitialized()) {
             client.addChoice(arg0.getInfo());
-        }
-        
-        //Kettle Client
+        } //Kettle Client
         else if (kclient.getServiceType().equals(type) && !kclient.isInitialized()) {
             kclient.setUp(address, port);
             ui.addPanel(kclient.returnUI(), kclient.getName());
@@ -170,9 +155,7 @@ public class ClientManager implements ServiceListener {
         } else if (kclient.getServiceType().equals(type)
                 && kclient.isInitialized()) {
             kclient.addChoice(arg0.getInfo());
-        }
-        
-        //Printer Client
+        } //Printer Client
         else if (pclient.getServiceType().equals(type) && !pclient.isInitialized()) {
             pclient.setUp(address, port);
             ui.addPanel(pclient.returnUI(), pclient.getName());
@@ -181,9 +164,7 @@ public class ClientManager implements ServiceListener {
         } else if (pclient.getServiceType().equals(type)
                 && pclient.isInitialized()) {
             pclient.addChoice(arg0.getInfo());
-        }
-        
-        //Lights Client
+        } //Lights Client
         else if (lclient.getServiceType().equals(type) && !lclient.isInitialized()) {
             lclient.setUp(address, port);
             ui.addPanel(lclient.returnUI(), lclient.getName());

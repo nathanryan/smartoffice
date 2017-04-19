@@ -10,10 +10,11 @@ package models;
  * @author nathan
  */
 public class PrinterModel {
-        public enum Action {
+
+    public enum Action {
         STATUS, CHECK_QUEUE, ADD_QUEUE, REMOVE_QUEUE, PRINT_QUEUE
     }
-    
+
     private Action action;
     private String message;
     private boolean value;
@@ -35,7 +36,6 @@ public class PrinterModel {
         this.message = message;
         this.value = value;
     }
-    
 
     public Action getAction() {
         return action;
@@ -60,6 +60,5 @@ public class PrinterModel {
     public void setValue(boolean value) {
         this.value = value;
     }
-    
-    
+
 }
