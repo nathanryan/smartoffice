@@ -9,15 +9,17 @@ import com.google.gson.Gson;
 import models.ThermostatModel;
 
 import serviceui.ServiceUI;
+
 /**
  *
  * @author nathan
  */
-public class ThermostatService extends Service{
-     private int maxRoomTemp;
-     private int minRoomTemp;
-     private int roomTemp;
-     private static boolean isIncreasing, isDecreasing;
+public class ThermostatService extends Service {
+
+    private int maxRoomTemp;
+    private int minRoomTemp;
+    private int roomTemp;
+    private static boolean isIncreasing, isDecreasing;
 
     public ThermostatService(String name) {
         super(name, "_thermostat._udp.local.");
@@ -31,62 +33,55 @@ public class ThermostatService extends Service{
 
     @Override
     public void performAction(String a) {
-        System.out.println("recieved: " +a);
+        System.out.println("recieved: " + a);
         ThermostatModel thermostat = new Gson().fromJson(a, ThermostatModel.class);
-        
+
         if (thermostat.getAction() == ThermostatModel.Action.STATUS) {
             String msg = getStatus();
             String json = new Gson().toJson(new ThermostatModel(ThermostatModel.Action.STATUS, msg));
             sendBack(json);
-        } 
-        
-        //INCREASE ROOM TEMP
+        } //INCREASE ROOM TEMP
         else if (thermostat.getAction() == ThermostatModel.Action.INCREASE_TEMP) {
             increase_temp();
-            String msg = (isIncreasing)? "The Room is Warming Up by 5c!" : "Sorry you cannot increase the Temp, Room is at Max Temp";
-            String json = new Gson().toJson(new ThermostatModel(ThermostatModel.Action.INCREASE_TEMP,msg));
+            String msg = (isIncreasing) ? "The Room is Warming Up by 5c!" : "Sorry you cannot increase the Temp, Room is at Max Temp";
+            String json = new Gson().toJson(new ThermostatModel(ThermostatModel.Action.INCREASE_TEMP, msg));
             System.out.println(json);
             sendBack(json);
-            
-            String serviceMessage = (isIncreasing)?  "The Room is Warming Up by 5c!" : "Sorry you cannot increase the Temp, Room is at Max Temp";
-            ui.updateArea(serviceMessage);            
-        } 
-        
-        //DECREASE ROOM TEMP
+
+            String serviceMessage = (isIncreasing) ? "The Room is Warming Up by 5c!" : "Sorry you cannot increase the Temp, Room is at Max Temp";
+            ui.updateArea(serviceMessage);
+        } //DECREASE ROOM TEMP
         else if (thermostat.getAction() == ThermostatModel.Action.DECREASE_TEMP) {
             decrease_temp();
-            String msg = (isDecreasing)? "The Room is Cooling Down by 5c!" : "Sorry you cannot decrease the Temp, Room is a Min Temp";
-            String json = new Gson().toJson(new ThermostatModel(ThermostatModel.Action.DECREASE_TEMP,msg));
+            String msg = (isDecreasing) ? "The Room is Cooling Down by 5c!" : "Sorry you cannot decrease the Temp, Room is a Min Temp";
+            String json = new Gson().toJson(new ThermostatModel(ThermostatModel.Action.DECREASE_TEMP, msg));
             System.out.println(json);
             sendBack(json);
-         
-            String serviceMessage = (isDecreasing)?  "The Room is Cooling Down by 5c!" : "Sorry you cannot decrease the Temp, Room is a Min Temp";
-            ui.updateArea(serviceMessage); 
-        } 
-        else {
+
+            String serviceMessage = (isDecreasing) ? "The Room is Cooling Down by 5c!" : "Sorry you cannot decrease the Temp, Room is a Min Temp";
+            ui.updateArea(serviceMessage);
+        } else {
             sendBack(BAD_COMMAND + " - " + a);
         }
     }
-    
-     public void increase_temp() {       
-            if (roomTemp != maxRoomTemp) {
-                isIncreasing = true;
-                roomTemp += 5;
-               }
-            else{
-                isIncreasing = false;
-            }
+
+    public void increase_temp() {
+        if (roomTemp != maxRoomTemp) {
+            isIncreasing = true;
+            roomTemp += 5;
+        } else {
+            isIncreasing = false;
         }
-     
-     public void decrease_temp() {
-            if (roomTemp != minRoomTemp) {
-                isDecreasing = true;
-                roomTemp -= 5;
-            }
-            else{
-                isDecreasing = false;
-            }
+    }
+
+    public void decrease_temp() {
+        if (roomTemp != minRoomTemp) {
+            isDecreasing = true;
+            roomTemp -= 5;
+        } else {
+            isDecreasing = false;
         }
+    }
 
     @Override
     public String getStatus() {

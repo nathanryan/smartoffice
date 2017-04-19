@@ -10,10 +10,11 @@ package models;
  * @author nathan
  */
 public class ThermostatModel {
-        public enum Action {
+
+    public enum Action {
         INCREASE_TEMP, DECREASE_TEMP, STATUS
     }
-    
+
     private Action action;
     private String message;
     private boolean value;
@@ -35,7 +36,6 @@ public class ThermostatModel {
         this.message = message;
         this.value = value;
     }
-    
 
     public Action getAction() {
         return action;

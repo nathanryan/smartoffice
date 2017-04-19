@@ -8,15 +8,16 @@ package client;
 import clientui.KettleUI;
 import com.google.gson.Gson;
 import models.KettleModel;
+
 /**
  *
  * @author Karl
  */
 public class KettleClient extends Client {
+
     private final String BOIL = "Boiled";
     private boolean isWarming = false;
-    
-    
+
     public KettleClient() {
         super();
         serviceType = "_kettle._udp.local.";
@@ -31,12 +32,11 @@ public class KettleClient extends Client {
         String json = new Gson().toJson(new KettleModel(KettleModel.Action.BOIL));
         String a = sendMessage(json);
         KettleModel kettle = new Gson().fromJson(a, KettleModel.class);
-        System.out.println("Client Received "+json);
+        System.out.println("Client Received " + json);
         if (kettle.getAction() == KettleModel.Action.BOIL) {
-           isWarming = kettle.getValue();
-           ui.updateArea(kettle.getMessage());
+            isWarming = kettle.getValue();
+            ui.updateArea(kettle.getMessage());
         }
-//         ui.updateArea("Kettle is already boiling..");
     }
 
     @Override

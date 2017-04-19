@@ -8,11 +8,13 @@ package client;
 import clientui.ThermostatUI;
 import com.google.gson.Gson;
 import models.ThermostatModel;
+
 /**
  *
  * @author nathan
  */
 public class ThermostatClient extends Client {
+
     private final String INCREASE_TEMP = "INCREASE_TEMP";
     private final String DECREASE_TEMP = "DECREASE_TEMP";
     private boolean isWarming = false;
@@ -31,28 +33,29 @@ public class ThermostatClient extends Client {
      * sends a message to warm the room.
      */
     public void increase_temp() {
-            String json = new Gson().toJson(new ThermostatModel(ThermostatModel.Action.INCREASE_TEMP));            
-            String a = sendMessage(json);
-            ThermostatModel thermostat = new Gson().fromJson(a, ThermostatModel.class);
-            System.out.println("Client Received "+json);
-            
-            if (thermostat.getAction() == ThermostatModel.Action.INCREASE_TEMP) {
-                isWarming = thermostat.getValue();
-                ui.updateArea(thermostat.getMessage());
-            }
+        String json = new Gson().toJson(new ThermostatModel(ThermostatModel.Action.INCREASE_TEMP));
+        String a = sendMessage(json);
+        ThermostatModel thermostat = new Gson().fromJson(a, ThermostatModel.class);
+        System.out.println("Client Received " + json);
+
+        if (thermostat.getAction() == ThermostatModel.Action.INCREASE_TEMP) {
+            isWarming = thermostat.getValue();
+            ui.updateArea(thermostat.getMessage());
+        }
     }
-    
+
+    //decrease temp message
     public void decrease_temp() {
-            String json = new Gson().toJson(new ThermostatModel(ThermostatModel.Action.DECREASE_TEMP));            
-            String a = sendMessage(json);
-            ThermostatModel thermostat = new Gson().fromJson(a, ThermostatModel.class);
-            System.out.println("Client Received "+json);
-            
-            if (thermostat.getAction() == ThermostatModel.Action.DECREASE_TEMP) {               
-                isWarming = thermostat.getValue();
-                ui.updateArea(thermostat.getMessage());
-            }
-        } 
+        String json = new Gson().toJson(new ThermostatModel(ThermostatModel.Action.DECREASE_TEMP));
+        String a = sendMessage(json);
+        ThermostatModel thermostat = new Gson().fromJson(a, ThermostatModel.class);
+        System.out.println("Client Received " + json);
+
+        if (thermostat.getAction() == ThermostatModel.Action.DECREASE_TEMP) {
+            isWarming = thermostat.getValue();
+            ui.updateArea(thermostat.getMessage());
+        }
+    }
 
     @Override
     public void updatePoll(String msg) {
