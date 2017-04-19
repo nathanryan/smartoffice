@@ -15,38 +15,56 @@ import javax.swing.JButton;
  */
 public class PrinterUI extends ClientUI{
     
-    private static final long serialVersionUID = -5318589393275157185L;
-    private JButton check;
-    private JButton print;
+private static final long serialVersionUID = -5318589393275157185L;
+    private JButton check_queue;
+    private JButton add_queue;
+    private JButton remove_queue;
+    private JButton print_queue;
+    
     private final PrinterClient parent;
 
-    public PrinterUI(PrinterClient printerClient) {
-        super(printerClient);
-        parent = printerClient;
+    public PrinterUI(PrinterClient kettleClient) {
+        super(kettleClient);
+        parent = kettleClient;
         init();
     }
 
-      @Override
+    @Override
     public void init() {
         super.init();
-        check = new JButton("Check Queue");
+        check_queue = new JButton("Check Queue");
         scroll.setBounds(5, 40, UIConstants.COMPONENTWIDTH, 300);
-        add(new JButton[]{check});
+        add(new JButton[]{check_queue});
         
-        check = new JButton("Start Printing Queuein");
+        print_queue = new JButton("Print");
         scroll.setBounds(5, 40, UIConstants.COMPONENTWIDTH, 300);
-        add(new JButton[]{check});
+        add(new JButton[]{print_queue});
+        
+        add_queue = new JButton("Add Document to Queue");
+        scroll.setBounds(5, 40, UIConstants.COMPONENTWIDTH, 300);
+        add(new JButton[]{add_queue});
+        
+        remove_queue = new JButton("Remove Document from Queue");
+        scroll.setBounds(5, 40, UIConstants.COMPONENTWIDTH, 300);
+        add(new JButton[]{remove_queue});
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == check) {
-            parent.check();
-        } 
-        
-        else if(e.getSource() == print){
-            parent.print();
+        if (e.getSource() == check_queue) {
+            parent.checkQueue();
         }
-       
+        
+        if (e.getSource() == add_queue) {
+            parent.addQueue();
+        }
+        
+        if (e.getSource() == remove_queue) {
+            parent.removeQueue();
+        }
+        
+        if (e.getSource() == print_queue) {
+            parent.Print();
+        }
     }
 }

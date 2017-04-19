@@ -46,8 +46,8 @@ public abstract class ClientUI extends JPanel implements ActionListener {
         add(services);
         services.setBounds(170, 5, 200, 30);
         controls = new JPanel();
-        controls.setBounds(5, UIConstants.CONTROLY, UIConstants.COMPONENTWIDTH,
-                50);
+        controls.setBounds(10, UIConstants.CONTROLY, UIConstants.COMPONENTWIDTH,
+                100);
         controls.setLayout(new FlowLayout());
         controls.setBorder(BorderFactory.createLineBorder(Color.black));
         add(controls);
