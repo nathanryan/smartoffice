@@ -17,6 +17,7 @@ public class ThermostatClient extends Client {
 
     private final String INCREASE_TEMP = "INCREASE_TEMP";
     private final String DECREASE_TEMP = "DECREASE_TEMP";
+    private final String RESET_TEMP = "RESET_TEMP";
     private boolean isWarming = false;
 
     /**
@@ -52,6 +53,19 @@ public class ThermostatClient extends Client {
         System.out.println("Client Received " + json);
 
         if (thermostat.getAction() == ThermostatModel.Action.DECREASE_TEMP) {
+            isWarming = thermostat.getValue();
+            ui.updateArea(thermostat.getMessage());
+        }
+    }
+
+    //reset temp message
+    public void reset_temp() {
+        String json = new Gson().toJson(new ThermostatModel(ThermostatModel.Action.RESET));
+        String a = sendMessage(json);
+        ThermostatModel thermostat = new Gson().fromJson(a, ThermostatModel.class);
+        System.out.println("Client Received " + json);
+
+        if (thermostat.getAction() == ThermostatModel.Action.RESET) {
             isWarming = thermostat.getValue();
             ui.updateArea(thermostat.getMessage());
         }

@@ -12,7 +12,7 @@ package models;
 public class ThermostatModel {
 
     public enum Action {
-        INCREASE_TEMP, DECREASE_TEMP, STATUS
+        INCREASE_TEMP, DECREASE_TEMP, STATUS, RESET
     }
 
     private Action action;

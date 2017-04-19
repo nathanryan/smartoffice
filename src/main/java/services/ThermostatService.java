@@ -18,8 +18,9 @@ public class ThermostatService extends Service {
 
     private int maxRoomTemp;
     private int minRoomTemp;
+    private int resetRoomTemp;
     private int roomTemp;
-    private static boolean isIncreasing, isDecreasing;
+    private static boolean isIncreasing, isDecreasing, isResetting;
 
     public ThermostatService(String name) {
         super(name, "_thermostat._udp.local.");
@@ -28,6 +29,7 @@ public class ThermostatService extends Service {
         roomTemp = 20; //defaault standard room temp
         isIncreasing = false;
         isDecreasing = false;
+        isResetting = false;
         ui = new ServiceUI(this, name);
     }
 
@@ -60,6 +62,16 @@ public class ThermostatService extends Service {
 
             String serviceMessage = (isDecreasing) ? "The Room is Cooling Down by 5c!" : "Sorry you cannot decrease the Temp, Room is a Min Temp";
             ui.updateArea(serviceMessage);
+        } //RESET ROOM TEMP
+        else if (thermostat.getAction() == ThermostatModel.Action.RESET) {
+            reset_temp();
+            String msg = (isResetting) ? "The Room temp has been reset" : "Sorry Room already reset";
+            String json = new Gson().toJson(new ThermostatModel(ThermostatModel.Action.RESET, msg));
+            System.out.println(json);
+            sendBack(json);
+
+            String serviceMessage = (isResetting) ? "The Room temp has been reset" : "Sorry you cannot reset the room again";
+            ui.updateArea(serviceMessage);
         } else {
             sendBack(BAD_COMMAND + " - " + a);
         }
@@ -80,6 +92,15 @@ public class ThermostatService extends Service {
             roomTemp -= 5;
         } else {
             isDecreasing = false;
+        }
+    }
+
+    public void reset_temp() {
+        if (roomTemp != 20) {
+            isResetting = true;
+            roomTemp = 20;
+        } else {
+            isResetting = false;
         }
     }
 

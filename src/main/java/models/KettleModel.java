@@ -12,7 +12,7 @@ package models;
 public class KettleModel {
 
     public enum Action {
-        BOIL, STATUS
+        BOIL, STATUS, FILL_KETTLE, EMPTY_KETTLE, TURN_OFF, TURN_ON
     }
 
     private Action action;

@@ -8,6 +8,7 @@ package client;
 import clientui.KettleUI;
 import com.google.gson.Gson;
 import models.KettleModel;
+import models.LightsModel;
 
 /**
  *
@@ -17,6 +18,10 @@ public class KettleClient extends Client {
 
     private final String BOIL = "Boiled";
     private boolean isWarming = false;
+    private final String EMPTY_KETTLE = "EMPTY_KETTLE";
+    private final String FILL_KETTLE = "FILL_KETTLE";
+    private final String TURN_OFF = "TURN_OFF";
+    private final String TURN_ON = "TURN_ON";
 
     public KettleClient() {
         super();
@@ -34,6 +39,58 @@ public class KettleClient extends Client {
         KettleModel kettle = new Gson().fromJson(a, KettleModel.class);
         System.out.println("Client Received " + json);
         if (kettle.getAction() == KettleModel.Action.BOIL) {
+            isWarming = kettle.getValue();
+            ui.updateArea(kettle.getMessage());
+        }
+    }
+
+    //fill the kettle message
+    public void fill_kettle() {
+        String json = new Gson().toJson(new KettleModel(KettleModel.Action.FILL_KETTLE));
+        String a = sendMessage(json);
+        KettleModel kettle = new Gson().fromJson(a, KettleModel.class);
+        System.out.println("Client Received " + json);
+
+        if (kettle.getAction() == KettleModel.Action.FILL_KETTLE) {
+            isWarming = kettle.getValue();
+            ui.updateArea(kettle.getMessage());
+        }
+    }
+
+    //empty kettle message
+    public void empty_kettle() {
+        String json = new Gson().toJson(new KettleModel(KettleModel.Action.EMPTY_KETTLE));
+        String a = sendMessage(json);
+        KettleModel kettle = new Gson().fromJson(a, KettleModel.class);
+        System.out.println("Client Received " + json);
+
+        if (kettle.getAction() == KettleModel.Action.EMPTY_KETTLE) {
+            isWarming = kettle.getValue();
+            ui.updateArea(kettle.getMessage());
+        }
+    }
+
+    //turn off power message
+    public void power_off() {
+        String json = new Gson().toJson(new KettleModel(KettleModel.Action.TURN_OFF));
+        String a = sendMessage(json);
+        KettleModel kettle = new Gson().fromJson(a, KettleModel.class);
+        System.out.println("Client Received " + json);
+
+        if (kettle.getAction() == KettleModel.Action.TURN_OFF) {
+            isWarming = kettle.getValue();
+            ui.updateArea(kettle.getMessage());
+        }
+    }
+    
+    //turn on power message
+    public void power_on() {
+        String json = new Gson().toJson(new KettleModel(KettleModel.Action.TURN_ON));
+        String a = sendMessage(json);
+        KettleModel kettle = new Gson().fromJson(a, KettleModel.class);
+        System.out.println("Client Received " + json);
+
+        if (kettle.getAction() == KettleModel.Action.TURN_ON) {
             isWarming = kettle.getValue();
             ui.updateArea(kettle.getMessage());
         }
