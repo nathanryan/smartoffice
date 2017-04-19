@@ -122,6 +122,7 @@ public class ClientManager implements ServiceListener {
         int port = arg0.getInfo().getPort();
         String type = arg0.getInfo().getType();
 
+        //Thermostat Client
         if (client.getServiceType().equals(type) && !client.isInitialized()) {
             client.setUp(address, port);
             ui.addPanel(client.returnUI(), client.getName());

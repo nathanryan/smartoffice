@@ -6,6 +6,8 @@
 package client;
 
 import clientui.ThermostatUI;
+import com.google.gson.Gson;
+import models.ThermostatModel;
 /**
  *
  * @author nathan
@@ -26,31 +28,31 @@ public class ThermostatClient extends Client {
     }
 
     /**
-     * sends a message to warm the bed.
+     * sends a message to warm the room.
      */
     public void increase_temp() {
-        if (!isWarming) {
-            String a = sendMessage(INCREASE_TEMP);
-            if (a.equals(OK)) {
-                //isWarming = true;
-                ui.updateArea("Increasing temperature by 1c");
+            String json = new Gson().toJson(new ThermostatModel(ThermostatModel.Action.INCREASE_TEMP));            
+            String a = sendMessage(json);
+            ThermostatModel thermostat = new Gson().fromJson(a, ThermostatModel.class);
+            System.out.println("Client Received "+json);
+            
+            if (thermostat.getAction() == ThermostatModel.Action.INCREASE_TEMP) {
+                isWarming = thermostat.getValue();
+                ui.updateArea(thermostat.getMessage());
             }
-        } else {
-            ui.updateArea("Temperature already increasing");
-        }
     }
     
     public void decrease_temp() {
-        if (!isWarming) {
-            String a = sendMessage(DECREASE_TEMP);
-            if (a.equals(OK)) {
-                
-                ui.updateArea("Decreasing temperature by 1c");
+            String json = new Gson().toJson(new ThermostatModel(ThermostatModel.Action.DECREASE_TEMP));            
+            String a = sendMessage(json);
+            ThermostatModel thermostat = new Gson().fromJson(a, ThermostatModel.class);
+            System.out.println("Client Received "+json);
+            
+            if (thermostat.getAction() == ThermostatModel.Action.DECREASE_TEMP) {               
+                isWarming = thermostat.getValue();
+                ui.updateArea(thermostat.getMessage());
             }
-        } else {
-            ui.updateArea("Temperature already decreasing");
-        }
-    }
+        } 
 
     @Override
     public void updatePoll(String msg) {
