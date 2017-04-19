@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package client;
 
 import java.io.IOException;
@@ -17,10 +12,15 @@ import java.net.InetAddress;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
+/*
+ * ThermostatService.java
  *
- * @author nathan and karl
+ * @reference Dominic Carr https://moodle.ncirl.ie/mod/resource/view.php?id=54977													/example.java
+ *
+ * @author Nathan Ryan, x13448212
+ * @author Karl King, x13565467
  */
+
 public class ClientManager implements ServiceListener {
 
     private final ClientManagerUI ui;

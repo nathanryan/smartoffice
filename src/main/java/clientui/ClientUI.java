@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package clientui;
 
 import java.awt.Color;
@@ -20,10 +15,12 @@ import javax.swing.JTextArea;
 
 import client.Client;
 
-/**
+/*
  *
- * @author nathan
+ * @reference Dominic Carr https://moodle.ncirl.ie/mod/resource/view.php?id=54977													/example.java
+ *
  */
+
 public abstract class ClientUI extends JPanel implements ActionListener {
     /**
      * The Constant serialVersionUID.

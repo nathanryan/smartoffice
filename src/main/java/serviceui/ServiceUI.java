@@ -20,10 +20,12 @@ import javax.swing.JTextArea;
 import services.Service;
 import clientui.UIConstants;
 
-/**
+/*
  *
- * @author nathan
+ * @reference Dominic Carr https://moodle.ncirl.ie/mod/resource/view.php?id=54977													/example.java
+ *
  */
+
 public class ServiceUI extends JFrame{
     protected JPanel panel;
     protected JTextArea pane = new JTextArea();

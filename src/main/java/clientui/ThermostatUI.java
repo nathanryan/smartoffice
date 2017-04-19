@@ -1,18 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package clientui;
 
 import java.awt.event.ActionEvent;
 import javax.swing.JButton;
 import client.ThermostatClient;
 
-/**
+/*
+ * ThermostatUI.java
  *
- * @author nathan
+ * @reference Dominic Carr https://moodle.ncirl.ie/mod/resource/view.php?id=54977													/example.java
+ *
+ * @author Nathan Ryan, x13448212
  */
+
 public class ThermostatUI extends ClientUI {
 
     private static final long serialVersionUID = -5318589393275157185L;

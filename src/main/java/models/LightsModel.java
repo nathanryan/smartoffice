@@ -1,14 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package models;
 
-/**
+/*
+ * LightsModel.java
  *
- * @author Karl
+ * @author Karl King, x13565467
  */
+
 public class LightsModel {
 
     public enum Action {
