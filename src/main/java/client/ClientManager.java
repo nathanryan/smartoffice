@@ -27,6 +27,7 @@ public class ClientManager implements ServiceListener {
     private final ThermostatClient client = new ThermostatClient();
     private final KettleClient kclient = new KettleClient();
     private final PrinterClient pclient = new PrinterClient();
+    private final LightsClient lclient = new LightsClient();
 
     public ClientManager() {
         try {
@@ -34,6 +35,7 @@ public class ClientManager implements ServiceListener {
             jmdns.addServiceListener(client.getServiceType(), this);
             jmdns.addServiceListener(kclient.getServiceType(), this);
             jmdns.addServiceListener(pclient.getServiceType(), this);
+            jmdns.addServiceListener(lclient.getServiceType(), this);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -94,7 +96,33 @@ public class ClientManager implements ServiceListener {
             kclient.remove(name);
         } 
         
-        //Run Printer Client
+            else if (kclient.getServiceType().equals(type)) {
+            ui.removePanel(kclient.returnUI());
+            kclient.disable();
+            kclient.initialized = false;
+        }
+        
+        //Run Lights Client
+        else if (lclient.getServiceType().equals(type) && lclient.hasMultiple()) {
+            if (lclient.isCurrent(name)) {
+                ServiceInfo[] a = jmdns.list(type);
+                for (ServiceInfo in : a) {
+                    if (!in.getName().equals(name)) {
+                        newService = in;
+                    }
+                }
+                lclient.switchService(newService);
+            }
+            lclient.remove(name);
+        } 
+        
+        else if (lclient.getServiceType().equals(type)) {
+            ui.removePanel(lclient.returnUI());
+            lclient.disable();
+            lclient.initialized = false;
+        }
+        
+        //Printer Client
         else if (pclient.getServiceType().equals(type) && pclient.hasMultiple()) {
             if (pclient.isCurrent(name)) {
                 ServiceInfo[] a = jmdns.list(type);
@@ -108,10 +136,10 @@ public class ClientManager implements ServiceListener {
             pclient.remove(name);
         } 
         
-        else if (kclient.getServiceType().equals(type)) {
-            ui.removePanel(kclient.returnUI());
-            kclient.disable();
-            kclient.initialized = false;
+        else if (pclient.getServiceType().equals(type)) {
+            ui.removePanel(pclient.returnUI());
+            pclient.disable();
+            pclient.initialized = false;
         }
         
     }
@@ -153,6 +181,17 @@ public class ClientManager implements ServiceListener {
         } else if (pclient.getServiceType().equals(type)
                 && pclient.isInitialized()) {
             pclient.addChoice(arg0.getInfo());
+        }
+        
+        //Lights Client
+        else if (lclient.getServiceType().equals(type) && !lclient.isInitialized()) {
+            lclient.setUp(address, port);
+            ui.addPanel(lclient.returnUI(), lclient.getName());
+            lclient.setCurrent(arg0.getInfo());
+            lclient.addChoice(arg0.getInfo());
+        } else if (lclient.getServiceType().equals(type)
+                && lclient.isInitialized()) {
+            lclient.addChoice(arg0.getInfo());
         }
     }
 
