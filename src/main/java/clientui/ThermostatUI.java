@@ -18,6 +18,7 @@ public class ThermostatUI extends ClientUI {
     private static final long serialVersionUID = -5318589393275157185L;
     private JButton increase;
     private JButton decrease;
+    private JButton reset;
     private final ThermostatClient parent;
 
     public ThermostatUI(ThermostatClient thermostatClient) {
@@ -36,6 +37,10 @@ public class ThermostatUI extends ClientUI {
         decrease = new JButton("Decrease");
         scroll.setBounds(5, 40, UIConstants.COMPONENTWIDTH, 300);
         add(new JButton[]{decrease});
+
+        reset = new JButton("Reset");
+        scroll.setBounds(5, 40, UIConstants.COMPONENTWIDTH, 300);
+        add(new JButton[]{reset});
     }
 
     @Override
@@ -44,6 +49,8 @@ public class ThermostatUI extends ClientUI {
             parent.increase_temp();
         } else if (e.getSource() == decrease) {
             parent.decrease_temp();
+        } else if (e.getSource() == reset) {
+            parent.reset_temp();
         }
     }
 }
