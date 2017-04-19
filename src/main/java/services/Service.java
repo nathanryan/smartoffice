@@ -17,10 +17,13 @@ import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceInfo;
 
 import serviceui.ServiceUI;
-/**
+
+/*
  *
- * @author nathan
+ * @reference Dominic Carr https://moodle.ncirl.ie/mod/resource/view.php?id=54977													/example.java
+ *
  */
+
 public abstract class Service extends Thread {
     protected String SERVICE_TYPE;
     protected String SERVICE_NAME;

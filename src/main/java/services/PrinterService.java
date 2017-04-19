@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package services;
 
 import java.util.Timer;
@@ -11,10 +6,14 @@ import serviceui.ServiceUI;
 import models.PrinterModel;
 import com.google.gson.Gson;
 
-/**
+/*
+ * PrinterService.java
  *
- * @author nathan
+ * @reference Dominic Carr https://moodle.ncirl.ie/mod/resource/view.php?id=54977													/example.java
+ *
+ * @author Nathan Ryan, x13448212
  */
+
 public class PrinterService extends Service {
 
     private Timer timer;

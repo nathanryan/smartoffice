@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package services;
 
 import com.google.gson.Gson;
@@ -13,10 +8,14 @@ import models.LightsModel;
 
 import serviceui.ServiceUI;
 
-/**
+/*
+ * KettleService.java
  *
- * @author karl
+ * @reference Dominic Carr https://moodle.ncirl.ie/mod/resource/view.php?id=54977													/example.java
+ *
+ * @author Karl King, x13565467
  */
+
 public class KettleService extends Service {
 
     private Timer timer;

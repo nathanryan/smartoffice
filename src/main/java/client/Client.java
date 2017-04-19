@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package client;
 
 import java.io.BufferedReader;
@@ -21,10 +16,12 @@ import clientui.ClientUI;
 import com.google.gson.Gson;
 import models.KettleModel;
 
-/**
+/*
  *
- * @author nathan
+ * @reference Dominic Carr https://moodle.ncirl.ie/mod/resource/view.php?id=54977													/example.java
+ *
  */
+
 public abstract class Client {
      protected ClientUI ui;
     protected String serverHost = "";

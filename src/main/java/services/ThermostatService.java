@@ -10,10 +10,14 @@ import models.ThermostatModel;
 
 import serviceui.ServiceUI;
 
-/**
+/*
+ * ThermostatService.java
  *
- * @author nathan
+ * @reference Dominic Carr https://moodle.ncirl.ie/mod/resource/view.php?id=54977													/example.java
+ *
+ * @author Nathan Ryan, x13448212
  */
+
 public class ThermostatService extends Service {
 
     private int maxRoomTemp;
